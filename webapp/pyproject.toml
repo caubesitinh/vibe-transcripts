@@ -9,4 +9,5 @@ description = "Flask web application for video file upload and transcription"
 requires-python = ">=3.8"
 dependencies = [
     "Flask>=2.3.0",
+    "openai>=1.0.0",
 ]

@@ -9,18 +9,40 @@
 <body>
     <div class="container">
         <h1>Video Transcription Upload</h1>
-        <div class="upload-area" id="uploadArea">
-            <div class="upload-content">
-                <div class="upload-icon">🎥</div>
-                <h2>Drag & Drop Video Files Here</h2>
-                <p>or <span class="browse-link" id="browseLink">browse files</span></p>
-                <p class="file-types">Supported formats: MP4, AVI, MOV, MKV, WMV, FLV, WebM, M4V, 3GP</p>
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="speakerName">Speaker Name (optional):</label>
+                <input type="text" id="speakerName" name="speaker_name" placeholder="Enter speaker name">
             </div>
-            <input type="file" id="fileInput" accept="video/*" multiple style="display: none;">
-        </div>
+            
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-content">
+                    <div class="upload-icon">🎥</div>
+                    <h2>Drag & Drop Video/Audio Files Here</h2>
+                    <p>or <span class="browse-link" id="browseLink">browse files</span></p>
+                    <p class="file-types">Supported formats: MP4, AVI, MOV, MKV, WMV, FLV, WebM, M4V, 3GP, WAV, MP3, FLAC, OGG</p>
+                </div>
+                <input type="file" id="fileInput" accept="video/*,audio/*" style="display: none;">
+            </div>
+        </form>
         
         <div class="status-area" id="statusArea" style="display: none;">
             <div class="status-message" id="statusMessage"></div>
+            <div class="progress-bar" id="progressBar" style="display: none;">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="results-area" id="resultsArea" style="display: none;">
+            <div class="summary-section">
+                <h3>Summary</h3>
+                <div class="summary-content" id="summaryContent"></div>
+            </div>
+            
+            <div class="transcript-section">
+                <h3>Transcript with Timestamps</h3>
+                <div class="transcript-content" id="transcriptContent"></div>
+            </div>
         </div>
     </div>
 

@@ -15,7 +15,7 @@ body {
 }
 
 .container {
-    max-width: 600px;
+    max-width: 800px;
     width: 90%;
     background: white;
     border-radius: 20px;
@@ -118,10 +118,124 @@ h1 {
     border: 1px solid #fc8181;
 }
 
-.status-area.uploading {
+.status-area.uploading, .status-area.processing {
     background: #bee3f8;
     color: #2a4365;
     border: 1px solid #90cdf4;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.progress-bar {
+    margin-top: 15px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.results-area {
+    margin-top: 40px;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    border: 1px solid #e9ecef;
+}
+
+.summary-section, .transcript-section {
+    margin-bottom: 30px;
+}
+
+.summary-section:last-child, .transcript-section:last-child {
+    margin-bottom: 0;
+}
+
+.results-area h3 {
+    margin-bottom: 15px;
+    color: #2d3748;
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 5px;
+}
+
+.summary-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+    line-height: 1.6;
+    font-size: 1rem;
+    color: #4a5568;
+}
+
+.transcript-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.transcript-segment {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.transcript-segment:last-child {
+    border-bottom: none;
+}
+
+.timestamp {
+    background: #667eea;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-right: 12px;
+    white-space: nowrap;
+    min-width: 80px;
+    text-align: center;
+}
+
+.transcript-segment .text {
+    flex: 1;
+    line-height: 1.5;
+    color: #4a5568;
 }
 
 @media (max-width: 768px) {
