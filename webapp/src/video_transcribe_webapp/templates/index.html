@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Transcription Upload</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Video Transcription Upload</h1>
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-content">
+                <div class="upload-icon">🎥</div>
+                <h2>Drag & Drop Video Files Here</h2>
+                <p>or <span class="browse-link" id="browseLink">browse files</span></p>
+                <p class="file-types">Supported formats: MP4, AVI, MOV, MKV, WMV, FLV, WebM, M4V, 3GP</p>
+            </div>
+            <input type="file" id="fileInput" accept="video/*" multiple style="display: none;">
+        </div>
+        
+        <div class="status-area" id="statusArea" style="display: none;">
+            <div class="status-message" id="statusMessage"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,4 +1,7 @@
 *.mov
 *.txt
 *.srt
+*.log
+*.pid
+.venv
 whisper.cpp
