@@ -4,4 +4,12 @@
 *.log
 *.pid
 .venv
-whisper.cpp
+
+# Whisper.cpp build artifacts
+whisper.cpp/build/
+whisper.cpp/models/*.bin
+whisper.cpp/**/*.o
+whisper.cpp/**/*.so
+whisper.cpp/**/*.dylib
+whisper.cpp/**/*.dll
+whisper.cpp/**/*.exe
