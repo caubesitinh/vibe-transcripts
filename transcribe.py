@@ -57,13 +57,13 @@ def extract_audio_if_needed(input_file):
             print("FFmpeg error:", e.stderr.decode())
         sys.exit(1)
 
-def transcribe_video(input_file, output_format="txt", model_path=None):
+def transcribe_video(input_file, output_format="both", model_path=None):
     """
     Transcribe video/audio file using whisper.cpp
     
     Args:
         input_file: Path to input audio/video file
-        output_format: Output format (txt, srt, vtt, json)
+        output_format: Output format (txt, srt, vtt, json, both)
         model_path: Path to whisper model (optional, defaults to large-v3-turbo)
     """
     
@@ -89,47 +89,56 @@ def transcribe_video(input_file, output_format="txt", model_path=None):
     temp_file_created = audio_file != input_file
     
     try:
-        # Build command
-        cmd = [str(whisper_cli)]
-        
-        # Add output format flag
-        format_flags = {
-            "txt": "--output-txt",
-            "srt": "--output-srt", 
-            "vtt": "--output-vtt",
-            "json": "--output-json"
-        }
-        
-        if output_format in format_flags:
-            cmd.append(format_flags[output_format])
+        # Handle "both" format by running transcription twice
+        if output_format == "both":
+            formats_to_run = ["txt", "srt"]
         else:
-            print(f"Warning: Unknown format '{output_format}', defaulting to txt")
-            cmd.append("--output-txt")
+            formats_to_run = [output_format]
         
-        # Add model path
-        cmd.extend(["-m", model_path])
+        success = True
+        for fmt in formats_to_run:
+            # Build command
+            cmd = [str(whisper_cli)]
+            
+            # Add output format flag
+            format_flags = {
+                "txt": "--output-txt",
+                "srt": "--output-srt", 
+                "vtt": "--output-vtt",
+                "json": "--output-json"
+            }
+            
+            if fmt in format_flags:
+                cmd.append(format_flags[fmt])
+            else:
+                print(f"Warning: Unknown format '{fmt}', skipping")
+                continue
+            
+            # Add model path
+            cmd.extend(["-m", model_path])
+            
+            # Set output file path next to original input file with same name
+            input_path = Path(input_file)
+            output_file_path = input_path.parent / input_path.stem
+            cmd.extend(["-of", str(output_file_path)])
+            
+            # Add audio file
+            cmd.append(audio_file)
+            
+            print(f"Running ({fmt}): {' '.join(cmd)}")
+            
+            try:
+                result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+                print(f"Transcription ({fmt}) completed successfully!")
+                if result.stdout:
+                    print("Output:", result.stdout)
+            except subprocess.CalledProcessError as e:
+                print(f"Error running whisper-cli for {fmt}: {e}")
+                if e.stderr:
+                    print("Error details:", e.stderr)
+                success = False
         
-        # Set output file path next to original input file with same name but .txt extension
-        input_path = Path(input_file)
-        output_file_path = input_path.parent / input_path.stem
-        cmd.extend(["-of", str(output_file_path)])
-        
-        # Add audio file
-        cmd.append(audio_file)
-        
-        print(f"Running: {' '.join(cmd)}")
-        
-        try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-            print("Transcription completed successfully!")
-            if result.stdout:
-                print("Output:", result.stdout)
-            return True
-        except subprocess.CalledProcessError as e:
-            print(f"Error running whisper-cli: {e}")
-            if e.stderr:
-                print("Error details:", e.stderr)
-            return False
+        return success
     finally:
         # Always clean up temp file if we created one
         if temp_file_created and os.path.exists(audio_file):
@@ -142,17 +151,18 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: uv run transcribe.py <input_file> [output_format] [model_path]")
         print("  input_file: Path to audio/video file")
-        print("  output_format: txt, srt, vtt, or json (default: txt)")
+        print("  output_format: txt, srt, vtt, json, or both (default: both)")
         print("  model_path: Path to whisper model file (optional)")
         print("")
         print("Examples:")
         print("  uv run transcribe.py audio.wav")
+        print("  uv run transcribe.py video.mp4 both")
         print("  uv run transcribe.py video.mp4 srt")
         print("  uv run transcribe.py audio.mp3 json /path/to/model.bin")
         sys.exit(1)
     
     input_file = sys.argv[1]
-    output_format = sys.argv[2] if len(sys.argv) > 2 else "txt"
+    output_format = sys.argv[2] if len(sys.argv) > 2 else "both"
     model_path = sys.argv[3] if len(sys.argv) > 3 else None
     
     if not os.path.exists(input_file):

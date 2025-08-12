@@ -1,3 +1,4 @@
 *.mov
 *.txt
+*.srt
 whisper.cpp
